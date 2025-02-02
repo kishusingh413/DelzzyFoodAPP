@@ -1,0 +1,61 @@
+swagger: '2.0'
+info:
+  description: API for Food Delivery service.
+  version: 1.0.0
+  title: Food Delivery API
+host: 'localhost:3000'
+basePath: '/api/v1'
+schemes:
+  - http
+paths:
+  /pricing/calculate-price:
+    post:
+      tags:
+        - pricing
+      summary: Calculate the price for a delivery.
+      description: Takes organization ID, item ID, zone, and total distance to calculate the delivery price.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Pricing calculation parameters
+          required: true
+          schema:
+            type: object
+            required:
+              - organization_id
+              - item_id
+              - zone
+              - total_distance
+            properties:
+              organization_id:
+                type: integer
+              item_id:
+                type: integer
+              zone:
+                type: string
+              total_distance:
+                type: number
+                format: float
+      responses:
+        '200':
+          description: Price calculated successfully.
+          schema:
+            type: object
+            properties:
+              total_price:
+                type: number
+                format: float
+        '400':
+          description: Invalid input or missing required fields.
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+definitions:
+  ErrorResponse:
+    type: object
+    properties:
+      error:
+        type: string
